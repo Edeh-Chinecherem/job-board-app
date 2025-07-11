@@ -81,7 +81,6 @@ export const JobCard = ({ job, showActions = true, onBookmarkToggle, sx }: JobCa
           </Typography>
         </Box>
       </CardContent>
-
       {showActions && (
         <CardActions sx={{ justifyContent: 'space-between' }}>
           <Button size="small" variant="contained">

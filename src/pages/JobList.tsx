@@ -18,7 +18,7 @@ export const JobList = () => {
   return (
     <Box
       sx={{
-        width: '100vw',
+        // width: '100vw',
         minHeight: '100vh',
         backgroundColor: 'background.default',
         py: 4,
@@ -28,7 +28,7 @@ export const JobList = () => {
       <Container
         maxWidth={false}
         sx={{
-          maxWidth: 1600,
+          // maxWidth: 1600,
           px: { xs: 0, sm: 2 },
           display: 'flex',
           flexDirection: 'column',
@@ -82,9 +82,9 @@ export const JobList = () => {
                 <JobCard
                   job={job}
                   sx={{
-                    width: '100%',
+                    width: '300px',
                     maxWidth: 400,
-                    height: '100%',
+                    height: '300px',
                   }}
                 />
               </Grid>
