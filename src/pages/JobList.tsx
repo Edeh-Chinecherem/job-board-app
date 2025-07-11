@@ -16,30 +16,21 @@ export const JobList = () => {
   };
 
   return (
-    <Container 
-      maxWidth="lg" 
+     <Container 
+      maxWidth={false}
       sx={{
-        py: 4,
-        minHeight: 'calc(100vh - 64px)', // Adjust based on your navbar height
+        px: { xs: 2, sm: 3 }, 
+        width: '100%',
+        minHeight: '100vh',
+        backgroundColor: 'background.default'
       }}
     >
-      <Box 
-        sx={{ 
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: '100%'
-        }}
-      >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 4,
-            fontWeight: 600,
-            textAlign: 'center',
-            width: '100%'
-          }}
-        >
+      <Box sx={{ 
+        maxWidth: 1200, 
+        mx: 'auto', // Centers content while allowing full-width bg
+        width: '100%'
+      }}>
+        <Typography variant="h4" sx={{ py: 3, textAlign: 'center' }}>
           Available Jobs
         </Typography>
         
