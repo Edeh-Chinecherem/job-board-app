@@ -1,13 +1,30 @@
 import { useState } from 'react';
-import { Container, Typography, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
+import { 
+  Container, 
+  Typography, 
+  Button, 
+  Dialog, 
+  DialogTitle, 
+  DialogContent, 
+  TextField, 
+  DialogActions,
+  MenuItem,
+  Box,
+  IconButton
+} from '@mui/material';
 import { JobCard } from '../components/JobCard';
 import { useStore } from '../store/useStore';
 import type { Job } from '../types/types';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const AdminDashboard = () => {
-  const { jobs, addJob, updateJob } = useStore();
+  const { jobs, addJob, updateJob, deleteJob } = useStore();
   const [open, setOpen] = useState(false);
   const [currentJob, setCurrentJob] = useState<Partial<Job> | null>(null);
+
+  const jobTypes = ['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship'];
+  const experienceLevels = ['Entry', 'Mid', 'Senior', 'Lead'];
 
   const handleOpen = (job: Job | null = null) => {
     setCurrentJob(job ? { ...job } : {
@@ -16,7 +33,12 @@ export const AdminDashboard = () => {
       location: '',
       salary: '',
       description: '',
+      requirements: '',
+      responsibilities: '',
       type: 'Full-time',
+      experienceLevel: 'Mid',
+      contactEmail: '',
+      applicationLink: ''
     });
     setOpen(true);
   };
@@ -35,11 +57,17 @@ export const AdminDashboard = () => {
     if (!currentJob) return;
     
     if (currentJob.id) {
-      updateJob(currentJob.id, currentJob);
+      updateJob(currentJob.id, currentJob as Job);
     } else {
       addJob(currentJob as Omit<Job, 'id' | 'postedAt' | 'isBookmarked'>);
     }
     handleClose();
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this job?')) {
+      deleteJob(id);
+    }
   };
 
   return (
@@ -47,18 +75,49 @@ export const AdminDashboard = () => {
       <Typography variant="h4" sx={{ my: 4 }}>
         Admin Dashboard
       </Typography>
-      <Button variant="contained" onClick={() => handleOpen(null)} sx={{ mb: 4 }}>
+      <Button 
+        variant="contained" 
+        onClick={() => handleOpen(null)} 
+        sx={{ mb: 4 }}
+      >
         Add New Job
       </Button>
+      
       {jobs.map(job => (
-        <JobCard 
-          key={job.id} 
-          job={job} 
-          showActions={false}
-        />
+        <Box key={job.id} sx={{ position: 'relative', mb: 2 }}>
+          <JobCard 
+            job={job} 
+            showActions={false}
+          />
+          <Box sx={{ 
+            position: 'absolute', 
+            top: 16, 
+            right: 16, 
+            display: 'flex', 
+            gap: 1,
+            backgroundColor: 'background.paper',
+            borderRadius: 1,
+            p: 0.5
+          }}>
+            <IconButton 
+              onClick={() => handleOpen(job)} 
+              color="primary"
+              aria-label="edit"
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton 
+              onClick={() => handleDelete(job.id)} 
+              color="error"
+              aria-label="delete"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        </Box>
       ))}
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>{currentJob?.id ? 'Edit Job' : 'Add New Job'}</DialogTitle>
         <DialogContent>
           <TextField
@@ -69,12 +128,123 @@ export const AdminDashboard = () => {
             fullWidth
             value={currentJob?.title || ''}
             onChange={handleChange}
+            sx={{ mb: 2 }}
           />
-          {/* Add more fields for company, location, etc. */}
+          <TextField
+            margin="dense"
+            name="company"
+            label="Company"
+            fullWidth
+            value={currentJob?.company || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            name="location"
+            label="Location"
+            fullWidth
+            value={currentJob?.location || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            name="salary"
+            label="Salary"
+            fullWidth
+            value={currentJob?.salary || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            select
+            margin="dense"
+            name="type"
+            label="Job Type"
+            fullWidth
+            value={currentJob?.type || 'Full-time'}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          >
+            {jobTypes.map(type => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            select
+            margin="dense"
+            name="experienceLevel"
+            label="Experience Level"
+            fullWidth
+            value={currentJob?.experienceLevel || 'Mid'}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          >
+            {experienceLevels.map(level => (
+              <MenuItem key={level} value={level}>
+                {level}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            margin="dense"
+            name="description"
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            value={currentJob?.description || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            name="requirements"
+            label="Requirements"
+            fullWidth
+            multiline
+            rows={4}
+            value={currentJob?.requirements || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            name="responsibilities"
+            label="Responsibilities"
+            fullWidth
+            multiline
+            rows={4}
+            value={currentJob?.responsibilities || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            name="contactEmail"
+            label="Contact Email"
+            fullWidth
+            value={currentJob?.contactEmail || ''}
+            onChange={handleChange}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            name="applicationLink"
+            label="Application Link"
+            fullWidth
+            value={currentJob?.applicationLink || ''}
+            onChange={handleChange}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit} variant="contained">
+            {currentJob?.id ? 'Update' : 'Add'} Job
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>

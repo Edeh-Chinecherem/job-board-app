@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-
+import type {Job} from '../types/types';
+import type { User } from '../types/types';
 interface StoreState {
   jobs: Job[];
   user: User | null;

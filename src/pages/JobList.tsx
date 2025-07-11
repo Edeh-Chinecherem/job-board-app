@@ -26,17 +26,22 @@ export const JobList = () => {
       }}
     >
       <Box sx={{ 
-        maxWidth: 1200, 
-        mx: 'auto', // Centers content while allowing full-width bg
-        width: '100%'
-      }}>
+          width: '100%',
+          mx: 'auto',
+        }}>
         <Typography variant="h4" sx={{ py: 3, textAlign: 'center' }}>
           Available Jobs
         </Typography>
         
-        <Box sx={{ width: '100%', maxWidth: 800, mb: 4 }}>
-          <JobFilter onFilter={handleFilter} />
-        </Box>
+        <Box sx={{ 
+            width: '100%',
+            maxWidth: 1200,
+            mb: 4,
+            mx: 'auto',
+            px: { xs: 0, sm: 2 }
+          }}>
+            <JobFilter onFilter={handleFilter} />
+          </Box>
 
         {jobs.length > 0 ? (
           <Grid container spacing={3} style = {{ width: '100%' }}>
